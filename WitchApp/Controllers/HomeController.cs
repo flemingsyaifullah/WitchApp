@@ -23,9 +23,9 @@ namespace WitchApp.Controllers
             var villagerA = new Villager(personA_age, personA_deathYear);
             var villagerB = new Villager(personB_age, personB_deathYear);
 
-            double averageKills = _witchFacade.CalculateAverageKills(villagerA, villagerB);
+            var averageKills = _witchFacade.CalculateAverageKills(villagerA, villagerB);
 
-            return View("Index", new CalculationResult { AverageKills = averageKills });
+            return View("Index", new CalculationResult { AverageKills = averageKills.Data });
         }
     }
 }

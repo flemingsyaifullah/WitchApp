@@ -15,15 +15,32 @@ namespace WitchApp
             _validationService = validationService;
         }
 
-        public double CalculateAverageKills(Villager villagerA, Villager villagerB)
+        public ResponseMessage<double> CalculateAverageKills(Villager villagerA, Villager villagerB)
         {
-            if (!_validationService.ValidateData(villagerA.Age, villagerA.YearOfDeath)
-            || !_validationService.ValidateData(villagerB.Age, villagerB.YearOfDeath))
+            var response = new ResponseMessage<double>();
+            try
             {
-                return -1;
+                if (!_validationService.ValidateData(villagerA.Age, villagerA.YearOfDeath)
+                || !_validationService.ValidateData(villagerB.Age, villagerB.YearOfDeath))
+                {
+                    response.Success = false;
+                    response.Message = "Invalid input";
+                    response.Data = -1;
+                }
+                else
+                {
+                    response.Success = true;
+                    response.Data = _killCalculatorService.CalculateAverageKillsOfTwoVillagers(villagerA, villagerB);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.InnerException?.Message;
+                response.Data = -1;
             }
 
-            return _killCalculatorService.CalculateAverageKillsOfTwoVillagers(villagerA, villagerB);
+            return response;
         }
     }
 }
